@@ -34,5 +34,5 @@ See **`../client/.env.example`**. Use **`client/src/holidaysApi.ts`** (`countrie
 
 ## Server won’t start
 
-- **`EADDRINUSE` / “address already in use”** — port **4010** is taken (often another `npm run dev`). Stop that process, or run **`PORT=4011 npm run dev`** and set **`VITE_HOLIDAYS_API_URL=http://127.0.0.1:4011`** for preview/build; if you keep a custom port in dev, update the proxy target in **`../client/vite.config.ts`**.
+- **`EADDRINUSE` / “address already in use”** — port **4010** is taken (often another `npm run dev`). Stop that process, or run **`PORT=4011 npm run dev`**, then start Vite with **`HOLIDAYS_API_PROXY_TARGET=http://127.0.0.1:4011 npm run dev`**. For preview/build, set **`VITE_HOLIDAYS_API_URL=http://127.0.0.1:4011`**.
 - Run from **`server/`** after **`npm install`**. Use **`npm run dev`** (watch) or **`npm start`** (no watch).

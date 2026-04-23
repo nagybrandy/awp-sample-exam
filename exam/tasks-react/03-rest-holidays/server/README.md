@@ -18,5 +18,5 @@ Default **`http://127.0.0.1:4010`**. **CORS** enabled. **`../client/vite.config.
 
 ### Server won’t start
 
-- **`EADDRINUSE` / “address already in use”** — something else is already bound to **4010** (often another `npm run dev` you left running). Stop that process, or use another port, e.g. **`PORT=4011 npm run dev`**, and set **`VITE_HOLIDAYS_API_URL=http://127.0.0.1:4011`** for **`vite preview`** / production-like runs; for dev proxy, point the proxy target at **4011** in **`../client/vite.config.ts`** if you change the API port.
+- **`EADDRINUSE` / “address already in use”** — something else is already bound to **4010** (often another `npm run dev` you left running). Stop that process, or use another port, e.g. **`PORT=4011 npm run dev`**. For the Vite dev client, start with **`HOLIDAYS_API_PROXY_TARGET=http://127.0.0.1:4011 npm run dev`** (see **`../client/vite.config.ts`**). For **`vite preview`** / build, set **`VITE_HOLIDAYS_API_URL=http://127.0.0.1:4011`** in **`../client/.env`**.
 - Run from the **`server/`** directory after **`npm install`**. Use **`npm run dev`** (watch) or **`npm start`** (no watch).
