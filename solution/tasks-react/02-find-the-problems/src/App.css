@@ -1,0 +1,62 @@
+.task-app {
+  max-width: 42rem;
+  margin: 0 auto;
+  padding: 1rem 1.25rem 2rem;
+}
+
+.task-app h1 {
+  font-size: 1.5rem;
+  font-weight: 700;
+  margin: 0 0 0.5rem;
+  color: #0f172a;
+}
+
+.task-app h2 {
+  font-size: 1rem;
+  font-weight: 600;
+  margin: 1.25rem 0 0.35rem;
+  color: #334155;
+}
+
+.task-app p {
+  margin: 0.25rem 0 0.5rem;
+}
+
+.task-app button {
+  margin-right: 0.5rem;
+  margin-top: 0.35rem;
+  padding: 0.45rem 0.9rem;
+  font-size: 0.875rem;
+  border-radius: 6px;
+  border: 1px solid #cbd5e1;
+  background: #fff;
+  cursor: pointer;
+}
+
+.task-app button:hover {
+  background: #f8fafc;
+  border-color: #94a3b8;
+}
+
+.task-app select,
+.task-app input[type='number'] {
+  margin-left: 0.35rem;
+  padding: 0.3rem 0.45rem;
+  border: 1px solid #cbd5e1;
+  border-radius: 4px;
+  font: inherit;
+}
+
+.task-app hr {
+  margin: 1.75rem 0;
+  border: none;
+  border-top: 1px solid #e2e8f0;
+}
+
+.task-app .box-playground {
+  margin-top: 0.75rem;
+  padding: 0.75rem;
+  border: 1px dashed #cbd5e1;
+  border-radius: 8px;
+  background: #fafafa;
+}
