@@ -37,11 +37,13 @@ Short context: **plants** (`name`, `spot`, optional `care_note`). **Laravel Bree
 
 ### Reference screenshots (`solution/tasks-laravel/Garden`)
 
-Captured from the reference app after `migrate:fresh --seed`, `npm run build`, `php artisan serve`. Images are repo-relative `![](…)` paths. Optional: inline Laravel PNGs with `node scripts/embed-readme-images.mjs`.
+Captured from the reference app after `migrate:fresh --seed`, `npm run build`, `php artisan serve`. Images are repo-relative `![](…)` paths.
 
+![Laravel guest home with plant count](docs/images/laravel/laravel-home.png)
 
+![Laravel login](docs/images/laravel/laravel-login.png)
 
-
+![Laravel plants listing](docs/images/laravel/laravel-plants-all.png)
 
 
 
@@ -129,7 +131,7 @@ php artisan serve
 
 Use **Node 20+**. In each task folder: `npm install`, `npm run dev`, `npm run build`. For `**03-rest-holidays`**, use `**server/**` + `**client/**`: start the API first (`cd …/03-rest-holidays/server && npm install && npm run dev`), then the Vite app (`cd …/03-rest-holidays/client && npm install && npm run dev`). For `**npm run build**` / `**vite preview**`, set `**VITE_HOLIDAYS_API_URL**` — see `**client/.env.example**`.
 
-**Workload (40 points):** **R1** 15 + **R2** 10 + **R3** 15 (`01-weather-component`, `02-find-the-problems`, `03-rest-holidays`). Follow the `**exam**` starters and align with the `**solution**`. Each task includes a reference `**![](docs/images/react/…)**` GIF (from the *Kliensoldali webprogramozás* `**zh**` archive — same idea, not a pixel-perfect spec).
+**Workload (40 points):** **R1** 15 + **R2** 10 + **R3** 15 (`01-weather-component`, `02-find-the-problems`, `03-rest-holidays`). Follow the `**exam**` starters and align with the `**solution**`. Under each block below there is a reference **GIF** in `docs/images/react/` (from the *Kliensoldali webprogramozás* archive — same idea, not a pixel-perfect spec).
 
 ---
 
@@ -141,7 +143,7 @@ Use **Node 20+**. In each task folder: `npm install`, `npm run dev`, `npm run bu
 - **d. (3 pts)** Pass the selected city into `**Forecast**` and render **name**, **icon**, **temperature**, and the **wind**, **humidity**, and **condition** fields from `**details**`.
 - **e. (3 pts)** Keep the **°C / °F** switch inside `**Forecast**` as **local** `useState<'C' | 'F'>` and connect the radios to the bundled Celsius/Fahrenheit values.
 
-
+![Reference: 01-weather-component](docs/images/react/01-weather.gif)
 
 ---
 
@@ -156,7 +158,7 @@ Use **Node 20+**. In each task folder: `npm install`, `npm run dev`, `npm run bu
 
 - **c. (4 pts)** When the user changes the colour `**<select>**`, update the positioned **box** fill so it matches the chosen colour (fix how `**Box**` reads `**color**` from props).
 
-
+![Reference: 02-find-the-problems](docs/images/react/02-find-the-problems.gif)
 
 ---
 
@@ -181,7 +183,7 @@ Use **Node 20+**. In each task folder: `npm install`, `npm run dev`, `npm run bu
 - **f. (3 pts)** On the holidays screen, `**fetch`** `**GET /api/countries/:countryCode/holidays?year=…**` whenever **country** or **year** changes; add a working **year** input (`type="number"` or equivalent).
 - **g. (3 pts)** Show each holiday’s **date** and **name** in a table and add a **“Back”** `**Link`** to `**/**`.
 
-
+![Reference: 03-rest-holidays](docs/images/react/03-rest-holidays.gif)
 
 ---
 
