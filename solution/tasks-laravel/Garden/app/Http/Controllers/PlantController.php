@@ -11,12 +11,9 @@ class PlantController extends Controller
 {
     public function index(): View
     {
-        $plants = Plant::query()
-            ->with('creator')
-            ->orderBy('name')
-            ->get();
-
-        return view('plants.index', compact('plants'));
+        //TODO (L1): return the Blade and pass `plants`).
+        
+        return view('welcome');
     }
 
     public function mine(): View

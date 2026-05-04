@@ -9,6 +9,16 @@ use Illuminate\Support\Facades\Route;
 //           Otherwise return `home` view with `plantCount` (Plant::count()).
 
 // TODO (L1): Register GET `/plants` → PlantController@index, name `plants.index`.
+Route::get('/', function () {
+    if (auth()->check()) {
+        return redirect()->route('dashboard');
+    }
+
+    return view('home', [
+        'plantCount' => Plant::query()->count(),
+    ]);
+})->name('home');
+Route::get('/plants', [PlantController::class, 'index'])->name('plants.index');
 
 Route::get('/plants/create', [PlantController::class, 'create'])->name('plants.create');
 Route::post('/plants', [PlantController::class, 'store'])->name('plants.store');

@@ -14,8 +14,8 @@ class PlantController extends Controller
         $plants = Plant::query()->orderBy('name')->get();
 
         // TODO (L1): return the `plants.index` Blade and pass `plants` (e.g. compact('plants')).
-
-        return view('welcome');
+        $plants = Plant::query()->orderBy('name')->get();
+        return view('plants.index', compact('plants'));
     }
 
     public function create(): View

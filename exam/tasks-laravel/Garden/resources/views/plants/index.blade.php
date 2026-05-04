@@ -1,9 +1,25 @@
-{{-- TODO (L1): Use Breeze’s <x-app-layout> around this page (like dashboard), add <x-slot name="header">…</x-slot> for the title strip, then @foreach $plants in a responsive Tailwind grid (name, spot, care_note). --}}
-<div class="p-6">
-    <p class="text-sm text-amber-800">Replace this block: the plants list must live inside <code>&lt;x-app-layout&gt;</code> with a <code>&lt;x-slot name="header"&gt;</code> section, not a standalone <code>&lt;div&gt;</code>.</p>
-    <div class="mt-4 grid gap-4 sm:grid-cols-2">
-        <div class="rounded border border-dashed border-gray-300 p-4 text-gray-500">
-            Placeholder card — replace with <code>@foreach ($plants as $plant)</code>.
+<x-app-layout>
+    <x-slot name="header">
+        <h2 class="text-xl font-semibold leading-tight text-gray-800">
+            {{ __('All plants') }}
+        </h2>
+    </x-slot>
+
+    <div class="py-10">
+        <div class="mx-auto max-w-7xl sm:px-6 lg:px-8">
+                <div class="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+
+                        <div class="overflow-hidden rounded-lg border border-gray-100 bg-white shadow-sm transition hover:shadow-md">
+                            <div class="border-b border-emerald-100 bg-emerald-50/50 px-5 py-3">
+                                <h3 class="text-lg font-semibold text-gray-900">Basil</h3>
+                            </div>
+                            <div class="space-y-2 px-5 py-4 text-sm text-gray-600">
+                                <p><span class="font-medium text-gray-800">{{ __('Added by') }}:</span> John Doe</p>
+                                <p><span class="font-medium text-gray-800">{{ __('Spot') }}:</span> Front yard</p>
+                                <p><span class="font-medium text-gray-800">{{ __('Care') }}:</span> Water every week</p>
+                            </div>
+                        </div>
+                </div>
         </div>
     </div>
-</div>
+</x-app-layout>
