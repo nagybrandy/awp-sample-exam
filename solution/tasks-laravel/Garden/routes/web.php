@@ -5,7 +5,17 @@ use App\Http\Controllers\ProfileController;
 use App\Models\Plant;
 use Illuminate\Support\Facades\Route;
 
+Route::get('/', function () {
+    if (auth()->check()) {
+        return redirect()->route('dashboard');
+    }
 
+    return view('home', [
+        'plantCount' => Plant::query()->count(),
+    ]);
+})->name('home');
+
+Route::get('/plants', [PlantController::class, 'index'])->name('plants.index');
 
 Route::middleware('auth')->group(function () {
     Route::get('/plants/mine', [PlantController::class, 'mine'])->name('plants.mine');
