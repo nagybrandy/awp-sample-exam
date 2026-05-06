@@ -2,14 +2,12 @@
 
 This repository contains an **exam** starter (`exam/`) and a **reference solution** (`solution/`). Part 1 is server-side (Laravel **Garden**). Part 2 is client-side (three small React + TypeScript apps).
 
+| Area                                    | Points | Pass threshold |
+| --------------------------------------- | ------ | -------------- |
+| Part 1 — Laravel (`exam/tasks-laravel`) | 40     | ≥ 40% (16 pts) |
+| Part 2 — React (`exam/tasks-react/*`)   | 40     | ≥ 40% (16 pts) |
 
-| Area                                           | Points | Pass threshold |
-| ---------------------------------------------- | ------ | -------------- |
-| Part 1 — Laravel (`exam/tasks-laravel/Garden`) | 40     | ≥ 40% (16 pts) |
-| Part 2 — React (`exam/tasks-react/*`)          | 40     | ≥ 40% (16 pts) |
-
-
-Overall exam rules (as communicated on the course): both parts must reach at least **40%**; the exam is in-person and supervised; you may bring prepared materials and **official language documentation** only; **no public internet** during the exam. The `**03-rest-holidays`** task uses a **local Fastify API** (fixtures on disk) — not third-party HTTP APIs.
+Course rules: both parts must reach at least **40%**, the exam is in-person and supervised, you may bring prepared materials and **official language documentation** only, **no public internet** during the exam. The `03-rest-holidays` task uses a **local Fastify API** (fixtures on disk) — not third-party HTTP APIs.
 
 ---
 
@@ -27,17 +25,25 @@ solution/
   tasks-react/              # Same three apps, completed
 ```
 
-Task descriptions and scoring are in **this README**. `**03-rest-holidays`** also has a short `**README.md**` at that task root (`client/` + `**server/**` layout).
+Task descriptions and scoring live in **this README**. `03-rest-holidays` also has a short `README.md` at that task root (`client/` + `server/` layout).
 
 ---
 
 ## Part 1 — Laravel: **Garden** (40 points)
 
-Short context: **plants** (`name`, `spot`, optional `care_note`). **Laravel Breeze** is installed — the **`plants/index`** starter already uses **`<x-app-layout>`** (with a header slot); the graded work there is to **iterate `$plants`** inside that shell, not to add or remove the layout wrapper. Also use **`PlantController`**, **`routes/web.php`**, and **`layouts/navigation.blade.php`** where the tasks require it. Set `APP_NAME=Garden` in `.env`. The **solution** may add “all vs my plants” / “added by” UX; ignore for marking unless your course says otherwise.
+A small **plants** app: each plant has a `name`, a `spot`, and an optional `care_note`. The starter is a Laravel app with **Breeze** already installed (auth, `<x-app-layout>`, navigation, dashboard). The exam ships with a `plants` table, a seeder, and a separate migration that adds `user_id` to `plants`. Set `APP_NAME=Garden` in `.env`. The reference solution adds extra UX (an "all vs my plants" page, "added by" on cards) — your course can ignore that for marking unless it says otherwise.
 
-### Reference screenshots (`solution/tasks-laravel/Garden`)
+**Three blocks (40 points):**
 
-Captured from the reference app after `migrate:fresh --seed`, `npm run build`, `php artisan serve`. Images are repo-relative `![](…)` paths.
+- **L1** — Listing routes + `plants/index` Blade (10)
+- **L2** — Many-to-many: pivot migration + Eloquent relations (10)
+- **L3** — Auth, navigation, create plant (20)
+
+Recommended order: **L1 → L2 → L3**.
+
+### Reference screenshots
+
+Captured from `solution/tasks-laravel/Garden` after `migrate:fresh --seed`, `npm run build`, `php artisan serve`.
 
 ![Laravel guest home with plant count](docs/images/laravel/laravel-home.png)
 
@@ -45,78 +51,74 @@ Captured from the reference app after `migrate:fresh --seed`, `npm run build`, `
 
 ![Laravel plants listing](docs/images/laravel/laravel-plants-all.png)
 
+---
 
+### L1 — `routes/web.php` + `PlantController` + `plants/index` (10 points)
 
-**Three blocks (40 points):** **1 — Listing** (`/` guest home + `**/plants`** read UI, 10) · **2 — Many-to-many** (10) · **3 — Auth & create** (logged-in `**/`** redirect + nav + middleware + create, 20). Order: **1 → 2 → 3**.
+Public guest **home** at `/` (with a plant counter), and a public **plants listing** at `/plants` driven by the controller.
+
+Files: `routes/web.php`, `app/Http/Controllers/PlantController.php`, `resources/views/home.blade.php`, `resources/views/plants/index.blade.php`. Look for `// TODO (L1)` markers.
+
+- **a. (1 pt)** Register `GET /` and name the route `home`.
+- **b. (1 pt)** When the user is **not** logged in, return the `home` view and pass `plantCount` (e.g. `Plant::count()`).
+- **c. (2 pts)** Register `GET /plants` pointing to `PlantController@index`, route name `plants.index`.
+- **d. (2 pts)** In `PlantController@index`, load the plants and return with the plants to `plants.index` instead of any placeholder view.
+- **e. (2 pts)** In `plants/index.blade.php`, **keep** the existing `<x-app-layout>` and `<x-slot name="header">…</x-slot>` shell — replace the hard-coded demo card inside the grid with a `@foreach ($plants as $plant)` (or equivalent) loop that renders the actual data.
+- **f. (1 pt)** For each plant, show `name`, `spot`, and `care_note` when present, using the responsive Tailwind grid/card pattern from the starter.
+- **g. (1 pt)** After `php artisan migrate:fresh --seed`, opening `/plants` renders without errors.
 
 ---
 
-### 1 — Listing: routes, `PlantController`, Blade (10 points)
+### L2 — Many-to-many: `plant_user` pivot + Eloquent relations (10 points)
 
-**Scope:** public `**/`** (guest **home** + `plantCount`) and `**/plants`** listing (read UI). Authenticated user on `**/**` → **§3 — Home route** (redirect).
+Add a many-to-many relation between users and plants (e.g. "users that grow this plant"). The exam starter does **not** include the pivot migration — you create it.
 
-**Files:** `routes/web.php`, `PlantController`, `resources/views/` (`home`, `plants/`). Starter already has `plants` table, seeder, `user_id` migration.
+Files: a new migration in `database/migrations/`, `app/Models/User.php`, `app/Models/Plant.php`. Look for `// TODO (L2)` markers in the models.
 
-- **a. (1 pt)** Register `**GET /`** and name the route `**home**`.
-- **b. (1 pt)** Guest on `**/`** → show `**home**` with `**plantCount**` = `**Plant::count()**`.
-- **c. (2 pts)** Register `**GET /plants`** → `**PlantController@index**`, route name `**plants.index**`.
-- **d. (2 pts)** In `**index()`**, load all plants; `**return view('plants.index', compact('plants'))**` (no stub).
-- **e. (2 pts)** `**plants/index.blade.php`:** Keep the starter’s `**<x-app-layout>`** and `**<x-slot name="header">…</x-slot>`** (do not strip or double-wrap the page). Replace the hard-coded demo card inside the grid with `**@foreach ($plants as $plant)`** (or equivalent) so the list is driven by the controller’s `**$plants**`.
-- **f. (1 pt)** For each plant, show `**name**`, `**spot**`, and `**care_note**` when present, using the responsive Tailwind grid/card pattern from the starter (or equivalent readable layout).
-- **g. (1 pt)** After `**migrate:fresh --seed`**, `**/plants**` renders without error.
+- **a. (2 pts)** Create a migration for a `plant_user` table (or equivalent name) with `user_id` and `plant_id` columns.
+- **b. (2 pts)** The pivot has `timestamps()` and a **unique** index on `(user_id, plant_id)`.
+- **c. (2 pts)** Both columns are foreign keys: `user_id → users.id`, `plant_id → plants.id`.
+- **d. (2 pts)** On the `User` model, define the correct relation with the correct pivot table and key names with belongsToMany to Plants.
+- **e. (2 pts)** On the `Plant` model, define the correct relation with the correct pivot table and key names with belongsToMany to Users.
 
 ---
 
-### 2 — Many-to-many: pivot + Eloquent (10 points)
+### L3 — Auth, navigation, create plant (20 points)
 
-**Files:** new migration, `**User`**, `**Plant**`. Exam starter does **not** include the pivot migration.
+Make the app behave correctly for logged-in vs guest users: redirect home for auth users, split the navbar, and let a logged-in user actually save a new plant via the form.
 
-- **a. (2 pts)** Migration creates `**plant_user`** (or equivalent) with `**user_id**`, `**plant_id**`.
-- **b. (2 pts)** Pivot has `**timestamps()`** and **unique**(`user_id`, `plant_id`).
-- **c. (2 pts)** Foreign keys to `**users`** and `**plants**`.
-- **d. (2 pts)** `**User::belongsToMany(Plant::class, …)`** with correct pivot/table keys.
-- **e. (2 pts)** `**Plant::belongsToMany(User::class, …)`** on the **same** pivot.
+Files: `routes/web.php`, `resources/views/layouts/navigation.blade.php`, `resources/views/plants/create.blade.php`, `app/Http/Controllers/PlantController.php`. Look for `// TODO (L3)` and `{{-- TODO (L3) --}}` markers.
 
----
+**Home route — `routes/web.php`**
 
-### 3 — Auth & create plant (20 points)
+- **a. (1 pt)** When a logged-in user opens `/`, **redirect** to `dashboard` (e.g. `redirect()->route('dashboard')`) instead of returning the guest home.
 
-**Scope:** authenticated behaviour on `**/`** (redirect), `**layouts/navigation.blade.php**`, `**web.php**` middleware, plant create Blade, `**@csrf**`, `**PlantController@store**`. (Guest `**/**` + `**home**` route name → **§1**.)
+**Navigation — `resources/views/layouts/navigation.blade.php`**
 
-#### Home route (`/`)
+- **b. (1 pt)** Inside `@guest`: show only the public links (browse plants, log in, register). Prefer `route()` over hard-coded URLs.
+- **c. (1 pt)** Inside `@auth`: show the logged-in links (dashboard, plants, add plant) and the Breeze profile / log-out controls.
+- **d. (1 pt)** Guests must **not** see the "Dashboard" or "Add plant" links in the main nav.
 
-- **a. (1 pt)** Authenticated user on `**/`** → **redirect** to `**dashboard`** (e.g. `route('dashboard')`).
+**Create plant — `plants/create.blade.php` + `PlantController@store`**
 
-#### Navigation — `layouts/navigation.blade.php`
+- **e. (4 pts)** In `store()`, after the validation block, **persist** the plant (e.g. `Plant::create([...])`) using the validated input plus the current user id.
+- **f. (4 pts)** In `plants/create.blade.php`, the spot input must be `name="spot"` (the starter ships with `name="garden_spot"`, which fails validation).
+- **g. (2 pts)** A valid POST results in a clean redirect or flash message — no HTTP **500**.
 
-- **a. (1 pt)** `**@guest`:** plants (browse), log in, register — prefer `**route()`**.
-- **b. (1 pt)** `**@auth`:** dashboard, plants, add plant, Breeze profile/logout.
-- **c. (1 pt)** Guests must **not** see dashboard or “add plant” as normal nav links.
+**CSRF & route protection — `routes/web.php` + the form**
 
-#### Create — Blade + `PlantController@store`
-
-- **a. (4 pts)** Validate and **save** the plant (e.g. `**Plant::create`**).
-- **b. (4 pts)** Form field name for the spot is `**spot`**, not `**garden_spot**`.
-- **c. (2 pts)** Valid POST: redirect or flash — no **500**.
-
-#### CSRF & middleware — `routes/web.php` + form
-
-- **a. (1 pt)** Plant form includes `**@csrf`** (no **419** on POST).
-- **b. (2 pts)** `**POST /plants`** behind `**auth**` (guest → redirect or **403**).
-- **c. (1 pt)** `**GET /plants/create`** in the same `**auth**` (or `**verified**`) group as required.
-- **d. (1 pt)** Guest must **not** see the create form.
-- **e. (1 pt)** Logged in: create → submit → new plant in DB or list.
+- **h. (1 pt)** The plant form includes `@csrf` so POST requests don't fail with **419**.
+- **i. (2 pts)** `POST /plants` is behind the `auth` middleware: a guest hitting it gets redirected (or a **403**), never to a working save.
+- **j. (1 pt)** `GET /plants/create` is in the same `auth` (or `verified`) group, so guests can't open the form either.
+- **k. (1 pt)** Guests do **not** see the create form at all (no link, route blocks them).
+- **l. (1 pt)** Logged-in: opening the form, submitting valid data, the new plant appears in the database / on the listing.
 
 ---
 
-### Reference (exam vs solution)
-
-The **exam** starter matches the tasks above. The **solution** may add extra UX (**all vs my plants**, **added by** on cards); your course can ignore that for marking unless it says otherwise.
-
-**Run (exam or solution):**
+### Run (exam or solution)
 
 ```bash
-cd exam/tasks-laravel/Garden   # or solution/...
+cd exam/tasks-laravel/Garden   # or solution/tasks-laravel/Garden
 composer install
 cp .env.example .env            # if needed
 php artisan key:generate
@@ -129,19 +131,25 @@ php artisan serve
 
 ## Part 2 — React + TypeScript (40 points)
 
-Use **Node 20+**. In each task folder: `npm install`, `npm run dev`, `npm run build`. For `**03-rest-holidays`**, use `**server/**` + `**client/**`: start the API first (`cd …/03-rest-holidays/server && npm install && npm run dev`), then the Vite app (`cd …/03-rest-holidays/client && npm install && npm run dev`). For `**npm run build**` / `**vite preview**`, set `**VITE_HOLIDAYS_API_URL**` — see `**client/.env.example**`.
+Use **Node 20+**. In each task folder: `npm install`, `npm run dev`, `npm run build`. For `03-rest-holidays`, start the API in `server/` first (`cd …/03-rest-holidays/server && npm install && npm run dev`), then the Vite app in `client/` (`cd …/03-rest-holidays/client && npm install && npm run dev`). For `npm run build` / `vite preview`, set `VITE_HOLIDAYS_API_URL` — see `client/.env.example`.
 
-**Workload (40 points):** **R1** 15 + **R2** 10 + **R3** 15 (`01-weather-component`, `02-find-the-problems`, `03-rest-holidays`). Follow the `**exam**` starters and align with the `**solution**`. Under each block below there is a reference **GIF** in `docs/images/react/` (from the *Kliensoldali webprogramozás* archive — same idea, not a pixel-perfect spec).
+**Three blocks (40 points):**
+
+- **R1** — `01-weather-component` (15)
+- **R2** — `02-find-the-problems` (10)
+- **R3** — `03-rest-holidays` (15)
+
+Each block has a reference GIF below it (from the *Kliensoldali webprogramozás* archive — same idea, not a pixel-perfect spec).
 
 ---
 
 ### R1 — `01-weather-component` (15 points) — weather UI
 
-- **a. (3 pts)** Import `**weatherList**` (and `**WeatherCity**` if needed) from `**./data/weather**` and pass it to `**CitiesList**` so the city list shows and you can select a city.
-- **b. (3 pts)** Store the **selected city** in React **state**; when the list is not empty, **default** to the **first** city.
-- **c. (3 pts)** Wire `**handleCityChange(id)**` so it selects the city with that `**id**` (e.g. `weatherList.find(…)`).
-- **d. (3 pts)** Pass the selected city into `**Forecast**` and render **name**, **icon**, **temperature**, and the **wind**, **humidity**, and **condition** fields from `**details**`.
-- **e. (3 pts)** Keep the **°C / °F** switch inside `**Forecast**` as **local** `useState<'C' | 'F'>` and connect the radios to the bundled Celsius/Fahrenheit values.
+- **a. (3 pts)** Import `weatherList` (and `WeatherCity` if needed) from `./data/weather` and pass it to `CitiesList` so the city list shows and you can select a city.
+- **b. (3 pts)** Store the **selected city** in React state; when the list is not empty, default to the **first** city.
+- **c. (3 pts)** Wire `handleCityChange(id)` so it selects the city with that `id` (e.g. `weatherList.find(…)`).
+- **d. (3 pts)** Pass the selected city into `Forecast` and render `name`, `icon`, `temperature`, plus the `wind`, `humidity`, and `condition` fields from `details`.
+- **e. (3 pts)** Keep the **°C / °F** switch inside `Forecast` as local `useState<'C' | 'F'>` and connect the radios to the bundled Celsius / Fahrenheit values.
 
 ![Reference: 01-weather-component](docs/images/react/01-weather.gif)
 
@@ -149,14 +157,14 @@ Use **Node 20+**. In each task folder: `npm install`, `npm run dev`, `npm run bu
 
 ### R2 — `02-find-the-problems` (10 points) — Task A + Task B
 
-**Task A — `TaskA/TaskA.tsx**`
+**Task A — `TaskA/TaskA.tsx`**
 
-- **a. (3 pts)** Make **“+5 minutes”** update the **modified** clock immediately (minutes and carry hours as needed), as shown by `**Time**`.
-- **b. (3 pts)** Make **“Toggle show seconds”** show or hide seconds on the **modified** clock **without** mutating the shared `**initialTime**` object used for **“Initial time”** (fix the shared-mutation / bad state update bug in the starter).
+- **a. (3 pts)** Make **"+5 minutes"** update the **modified** clock immediately (minutes carry into hours as needed), as shown by the `Time` component.
+- **b. (3 pts)** Make **"Toggle show seconds"** show or hide seconds on the **modified** clock **without** mutating the shared `initialTime` object that drives "Initial time" — fix the shared-mutation / bad state update bug in the starter.
 
-**Task B — `TaskB/Box.tsx**`
+**Task B — `TaskB/Box.tsx`**
 
-- **c. (4 pts)** When the user changes the colour `**<select>**`, update the positioned **box** fill so it matches the chosen colour (fix how `**Box**` reads `**color**` from props).
+- **c. (4 pts)** When the user changes the colour `<select>`, update the positioned **box** fill so it matches the chosen colour (fix how `Box` reads `color` from props).
 
 ![Reference: 02-find-the-problems](docs/images/react/02-find-the-problems.gif)
 
@@ -164,11 +172,10 @@ Use **Node 20+**. In each task folder: `npm install`, `npm run dev`, `npm run bu
 
 ### R3 — `03-rest-holidays` (15 points) — API + router
 
-- **a. (1 pt)** `**cd 03-rest-holidays/server**`, run `**npm install**` and `**npm run dev**` (default `**http://127.0.0.1:4010**`). Start the API **before** the Vite app in `**client/**`.
-- **b. (2 pts)** Load countries and holidays **only via HTTP** from your Fastify app (fixtures live in `**server/data/*.json**`). Do **not** call `**date.nager.at**` and do **not** `**import**` those JSON files in the client as the main data source.
+- **a. (1 pt)** `cd 03-rest-holidays/server`, run `npm install` and `npm run dev` (default `http://127.0.0.1:4010`). Start the API **before** the Vite app in `client/`.
+- **b. (2 pts)** Load countries and holidays **only via HTTP** from your Fastify app (fixtures live in `server/data/*.json`). Do **not** call `date.nager.at` and do **not** `import` the JSON files directly in the client as the main data source.
 
 **API (reference)**
-
 
 | Method | Path                                             | Response                                           |
 | ------ | ------------------------------------------------ | -------------------------------------------------- |
@@ -176,14 +183,12 @@ Use **Node 20+**. In each task folder: `npm install`, `npm run dev`, `npm run bu
 | `GET`  | `/api/countries`                                 | Full `countries.json` array                        |
 | `GET`  | `/api/countries/:countryCode/holidays?year=YYYY` | Holidays filtered by `countryCode` and year prefix |
 
-
-- **c. (2 pts)** Use `**client/src/holidaysApi.ts**` (`countriesEndpoint`, `**holidaysEndpoint**`). In dev, `**client/vite.config.ts**` proxies `**/api**` to the server so `**fetch('/api/...')**` works; for `**npm run build**` / `**vite preview**`, set `**VITE_HOLIDAYS_API_URL**` as in `**client/.env.example**`. More detail: `**server/README.md**`.
-- **d. (2 pts)** `**fetch**` the country list from `**GET /api/countries**` (or the proxied `**/api/countries**` path) and render a table of `**Link`**s to `**/{countryCode}`**.
-- **e. (2 pts)** Set up `**main.tsx`** / `**react-router-dom**` with a **nested** route: parent layout shows the country table, child route `**:countryCode`** shows holidays with an `**Outlet**`.
-- **f. (3 pts)** On the holidays screen, `**fetch`** `**GET /api/countries/:countryCode/holidays?year=…**` whenever **country** or **year** changes; add a working **year** input (`type="number"` or equivalent).
-- **g. (3 pts)** Show each holiday’s **date** and **name** in a table and add a **“Back”** `**Link`** to `**/**`.
+- **c. (2 pts)** Use `client/src/holidaysApi.ts` (`countriesEndpoint`, `holidaysEndpoint`). In dev, `client/vite.config.ts` proxies `/api` to the server so `fetch('/api/...')` works; for `npm run build` / `vite preview`, set `VITE_HOLIDAYS_API_URL` as in `client/.env.example`. More detail in `server/README.md`.
+- **d. (2 pts)** `fetch` the country list from `GET /api/countries` (or the proxied `/api/countries` path) and render a table of `Link`s to `/{countryCode}`.
+- **e. (2 pts)** Set up `main.tsx` / `react-router-dom` with a **nested** route: the parent layout shows the country table, the child route `:countryCode` shows holidays through an `Outlet`.
+- **f. (3 pts)** On the holidays screen, `fetch` `GET /api/countries/:countryCode/holidays?year=…` whenever the **country** or **year** changes; add a working **year** input (`type="number"` or equivalent).
+- **g. (3 pts)** Show each holiday's **date** and **name** in a table and add a **"Back"** `Link` to `/`.
 
 ![Reference: 03-rest-holidays](docs/images/react/03-rest-holidays.gif)
 
 ---
-
