@@ -41,7 +41,7 @@ A small **plants** app: each plant has a `name`, a `spot`, and an optional `care
 
 Recommended order: **L1 → L2 → L3**.
 
-Screenshots under each block were captured from a running **Garden** app (`solution/tasks-laravel/Garden` after `migrate:fresh --seed`, `npm run build`, `php artisan serve` on `http://127.0.0.1:8011`).
+Reference screenshots were taken from a running **Garden** app (`solution/tasks-laravel/Garden` after `migrate:fresh --seed`, `npm run build`, `php artisan serve`).
 
 ---
 
@@ -78,9 +78,7 @@ Files: a new migration in `database/migrations/`, `app/Models/User.php`, `app/Mo
 - **d. (2 pts)** On the `User` model, define the correct relation with the correct pivot table and key names with belongsToMany to Plants.
 - **e. (2 pts)** On the `Plant` model, define the correct relation with the correct pivot table and key names with belongsToMany to Users.
 
-There is no separate pivot admin UI; after seeding, the reference **dashboard** lists **Plants you tend** from the `plant_user` relation.
-
-![Dashboard: plants linked via `plant_user`](docs/images/laravel/laravel-l2-pivot-dashboard.png)
+This block is **schema + Eloquent only** — there is no separate pivot screen in the exam brief; check relations with `php artisan tinker`, tests, or your own temporary routes if you need to.
 
 ---
 
@@ -94,17 +92,11 @@ Files: `routes/web.php`, `resources/views/layouts/navigation.blade.php`, `resour
 
 - **a. (1 pt)** When a logged-in user opens `/`, **redirect** to `dashboard` (e.g. `redirect()->route('dashboard')`) instead of returning the guest home.
 
-![Logged-in user visiting `/` is redirected to the dashboard](docs/images/laravel/laravel-l2-pivot-dashboard.png)
-
 **Navigation — `resources/views/layouts/navigation.blade.php`**
 
 - **b. (1 pt)** Inside `@guest`: show only the public links (browse plants, log in, register). Prefer `route()` over hard-coded URLs.
 - **c. (1 pt)** Inside `@auth`: show the logged-in links (dashboard, plants, add plant) and the Breeze profile / log-out controls.
 - **d. (1 pt)** Guests must **not** see the "Dashboard" or "Add plant" links in the main nav.
-
-![Guest `/login` — browse + auth links only](docs/images/laravel/laravel-login.png)
-
-![Authenticated nav on `/plants`](docs/images/laravel/laravel-l3-nav-authenticated.png)
 
 **Create plant — `plants/create.blade.php` + `PlantController@store`**
 
@@ -112,7 +104,7 @@ Files: `routes/web.php`, `resources/views/layouts/navigation.blade.php`, `resour
 - **f. (4 pts)** In `plants/create.blade.php`, the spot input must be `name="spot"` (the starter ships with `name="garden_spot"`, which fails validation).
 - **g. (2 pts)** A valid POST results in a clean redirect or flash message — no HTTP **500**.
 
-![`/plants/create` form (same page carries `@csrf` for h.)](docs/images/laravel/laravel-l3-create-plant.png)
+![Add plant form (`/plants/create`), solution](docs/images/laravel/laravel-l3-create-plant.png)
 
 **CSRF & route protection — `routes/web.php` + the form**
 
@@ -148,7 +140,7 @@ Use **Node 20+**. In each task folder: `npm install`, `npm run dev`, `npm run bu
 - **R2** — `02-find-the-problems` (10)
 - **R3** — `03-rest-holidays` (15)
 
-Each block includes **PNG screenshots** taken from the running **solution** Vite dev apps (local `npm run dev`, same idea as the old course GIFs — not a pixel-perfect spec).
+Each React block has **one** reference PNG from the running **solution** Vite app (`npm run dev`) — rough visual guide, not a pixel-perfect spec.
 
 ---
 
@@ -199,9 +191,6 @@ Each block includes **PNG screenshots** taken from the running **solution** Vite
 - **d. (2 pts)** `fetch` the country list from `GET /api/countries` (or the proxied `/api/countries` path) and render a table of `Link`s to `/{countryCode}`.
 - **e. (2 pts)** Set up `main.tsx` / `react-router-dom` with a **nested** route: the parent layout shows the country table, the child route `:countryCode` shows holidays through an `Outlet`.
 - **f. (3 pts)** On the holidays screen, `fetch` `GET /api/countries/:countryCode/holidays?year=…` whenever the **country** or **year** changes; add a working **year** input (`type="number"` or equivalent).
-
-![Reference: holidays + year (`/:countryCode`, e.g. `/AD`)](docs/images/react/r3-rest-holidays-detail.png)
-
 - **g. (3 pts)** Show each holiday's **date** and **name** in a table and add a **"Back"** `Link` to `/`.
 
 ---

@@ -13,5 +13,6 @@ class Plant extends Model
         'care_note',
     ];
 
-    // TODO (L2): belongsTo User (creator) on `user_id`; belongsToMany User — pivot `plant_user`
+    // TODO (L2.e): Define a belongsToMany(User::class, ...) relation on the
+    //              `plant_user` pivot table (matches the migration from L2.a–c).
 }

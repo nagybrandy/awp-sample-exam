@@ -8,7 +8,9 @@
     <div class="py-10">
         <div class="mx-auto max-w-2xl sm:px-6 lg:px-8">
             <div class="overflow-hidden bg-white p-6 shadow-sm sm:rounded-lg">
-                {{-- TODO (L3): Add @csrf. Fix the spot field name. Protect this route with auth middleware. --}}
+                {{-- TODO (L3.h): Add @csrf inside the <form> (otherwise POST fails with HTTP 419). --}}
+                {{-- TODO (L3.f): Fix the spot input below: name="garden_spot" must become name="spot". --}}
+                {{-- TODO (L3.i–j): Protect /plants/create and POST /plants with the `auth` middleware in routes/web.php. --}}
                 <form method="POST" action="{{ route('plants.store') }}" class="space-y-6">
 
                     <div>

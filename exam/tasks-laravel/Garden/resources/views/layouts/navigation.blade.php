@@ -1,4 +1,7 @@
-{{-- TODO (L3): Split primary links and account menu with @guest / @auth (see solution). Do not show Dashboard / Add plant / profile to guests. --}}
+{{-- TODO (L3.b–d): Split the links below using @guest / @auth.
+        @guest: only Plants (browse), Log in, Register.
+        @auth:  Dashboard, Plants, Add plant, plus the Breeze profile/log-out controls.
+        Guests must NOT see Dashboard or Add plant. Prefer route() over hard-coded url() paths. --}}
 <nav x-data="{ open: false }" class="border-b border-gray-100 bg-white">
     <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <div class="flex h-16 justify-between">

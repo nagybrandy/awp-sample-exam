@@ -11,11 +11,9 @@ class PlantController extends Controller
 {
     public function index(): View
     {
-        $plants = Plant::query()->orderBy('name')->get();
-
-        // TODO (L1): return the `plants.index` Blade and pass `plants` (e.g. compact('plants')).
-        $plants = Plant::query()->orderBy('name')->get();
-        return view('plants.index', compact('plants'));
+        // TODO (L1.d): Load all plants (e.g. Plant::orderBy('name')->get()) and
+        //              return view('plants.index', compact('plants')).
+        return view('welcome');
     }
 
     public function create(): View
@@ -31,7 +29,8 @@ class PlantController extends Controller
             'care_note' => ['nullable', 'string', 'max:255'],
         ]);
 
-        // TODO (L3): persist the plant (Plant::create / similar) after fixing the form field names and CSRF.
+        // TODO (L3.e): persist the plant (e.g. Plant::create([...$validated, 'user_id' => $request->user()->id]))
+        //              after fixing the form field names (L3.f) and CSRF (L3.h) in plants/create.blade.php.
 
         return redirect()->back()->with('status', 'Validated (finish store + routes + CSRF).');
     }

@@ -5,21 +5,16 @@ use App\Http\Controllers\ProfileController;
 use App\Models\Plant;
 use Illuminate\Support\Facades\Route;
 
-// TODO (L1): Register GET `/` named `home`. If the user is authenticated, redirect to `dashboard`.
-//           Otherwise return `home` view with `plantCount` (Plant::count()).
+// TODO (L1.a–b): Register GET `/`, name it `home`. For guests, return the `home`
+//                view with `plantCount` (Plant::count()).
+// TODO (L3.a):   For an authenticated user, redirect from `/` to the `dashboard`
+//                route instead of returning the guest home.
 
-// TODO (L1): Register GET `/plants` → PlantController@index, name `plants.index`.
-Route::get('/', function () {
-    if (auth()->check()) {
-        return redirect()->route('dashboard');
-    }
+// TODO (L1.c):   Register GET `/plants` → `PlantController@index`,
+//                route name `plants.index`.
 
-    return view('home', [
-        'plantCount' => Plant::query()->count(),
-    ]);
-})->name('home');
-Route::get('/plants', [PlantController::class, 'index'])->name('plants.index');
-
+// TODO (L3.i–j): Wrap `GET /plants/create` and `POST /plants` in the `auth`
+//                middleware so guests cannot reach them.
 Route::get('/plants/create', [PlantController::class, 'create'])->name('plants.create');
 Route::post('/plants', [PlantController::class, 'store'])->name('plants.store');
 

@@ -25,5 +25,6 @@ class User extends Authenticatable
         ];
     }
 
-    // TODO (L2): belongsToMany Plant — pivot `plant_user`
+    // TODO (L2.d): Define a belongsToMany(Plant::class, ...) relation on the
+    //              `plant_user` pivot table (matches the migration from L2.a–c).
 }
