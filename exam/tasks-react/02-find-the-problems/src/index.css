@@ -1,7 +1,23 @@
-body {
-  margin: 0;
-  min-height: 100vh;
-  font-family: system-ui, -apple-system, sans-serif;
-  background: #f4f4f5;
-  color: #18181b;
+@import url('https://cdn.jsdelivr.net/gh/elte-fi/www-assets@19.10.16/styles/mdss.min.css');
+
+:root {
+  color-scheme: light dark;
+  color: #213547;
+  background-color: #ffffff;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    color: rgba(255, 255, 255, 0.87);
+    background-color: #242424;
+  }
+}
+
+hr {
+  border: none;
+  background-color: #ccc;
+  color: #ccc;
+  height: 5px;
+  visibility: visible;
+  margin: 10px auto;
 }

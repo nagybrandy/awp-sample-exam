@@ -1,0 +1,3 @@
+TODO: show selected city (name, temp, humidity, wind, condition, icon).
+
+TODO: °C / °F toggle with local state (radio group id tempUnitChanger).
